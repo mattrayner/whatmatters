@@ -1,6 +1,6 @@
 <?php
 class Blackboard {
-	private $mysql_connection;
+	public $mysql_connection;
 	
 	/**
 	 * Load in our config file and use the information to connect to the givecat database.
@@ -15,7 +15,7 @@ class Blackboard {
 		$this->mysql_connection = mysqli_connect("localhost",$databaseuser,$databasepass,$databasename);
 		
 		// Check connection
-		if (mysqli_connect_errno($mysql_connection)){
+		if (mysqli_connect_errno($this->mysql_connection)){
 			//Build our error string
 			$json = '{error: "Failed to connect to MySQL: '.mysqli_connect_error().'"}';
 			
@@ -33,7 +33,7 @@ class Blackboard {
 		if (is_numeric($status)) {
         	$dbresult = mysqli_query($this->mysql_connection,"SELECT *  FROM `comments` WHERE `status` = ".$status);
 		
-			return commentsArray($dbresult);
+			return $this->commentsArray($dbresult);
 		}
 		
 		return null;
@@ -47,11 +47,15 @@ class Blackboard {
 	 **/
 	private function commentsArray($dbresult){
 		//Create a comments array
-		$comments;
+		$comments[] = null;
 		
 		//Iterate over every row in the result
 		while($row = mysqli_fetch_array($dbresult)){
-		        array_push($comments, new Comment($row['id'], $row['timestamp'], $row['comment'], $row['status'])); //Add an array entry
+				if($comments != null){
+					$comments[0] = serialize(new Comment($row['id'], $row['timestamp'], $row['comment'], $row['status']));
+				}else{
+					array_push($comments, serialize(new Comment($row['id'], $row['timestamp'], $row['comment'], $row['status']))); //Add an array entry
+				}
 		}
 		
 		return $comments;
@@ -63,22 +67,6 @@ class Blackboard {
 	public function close(){
 		//Close the database connection
 		mysqli_close($this->mysql_connection);
-	}
-	
-	/**
-	 * Output the json we have to the browser!
-	 * - Check if there is a callback (JSONP)
-	 *   - Output appropriate json
-	 *
-	 * @param        JSON        A json string to be outputted including the {}
-	 * @return        String     The json string with or without a vcallback
-	 **/
-	public function outputJSON($json){
-		if(isset($_GET['callback'])){
-	    	return "{$_GET['callback']}(".$json.")";
-		}else{
-			return $json;
-		}
 	}
 }
 
@@ -105,34 +93,28 @@ class Comment {
      * @param string Comment COMMENT
      * @param int Comment STATUS
      */
-    public function __construct ($id,$timestamp,$comment,$status) {
-        $this->id = $id;
-        $this->timestamp = $timestamp;
-        $this->comment = $comment;
-        $this->status = $status;
+    public function __construct ($idx,$timestampx,$commentx,$statusx) {
+        $this->id = $idx;
+        $this->timestamp = $timestampx;
+        $this->comment = $commentx;
+        $this->status = $statusx;
     }
-    
-        
-    /**
-     * getID function.
-     * 
-     * @access public
-     * @return int
-     */
-    public function getID() {
-	    return $this->id;
-    }
-    
-    public function getTimeStamp() {
-	    return $this->timestamp;
-    }
-    
-    public function getComment() {
-	    return $this->comment;
-    }
-    
-    public function getStatus() {
-	    return $this->status;
-    }
+}
+
+/*********** BEGIN HELPER FUNCTIONS (CLASSES IS AN INCORRECT NAME) ****************/
+/**
+ * Output the json we have to the browser!
+ * - Check if there is a callback (JSONP)
+ *   - Output appropriate json
+ *
+ * @param        JSON        A json string to be outputted including the {}
+ * @return        String     The json string with or without a vcallback
+ **/
+function outputJSON($json){
+	if(isset($_GET['callback'])){
+    	return $_GET['callback']."(".$json.")";
+	}else{
+		return $json;
+	}
 }
 ?>
