@@ -49,6 +49,6 @@ if($allowedToExecute){
 		echo outputJSON("{warning: 'No comments were retrived from the server....'}");
 	}
 } else {
-	echo outputJSON("{error: 'You have insufficient permissions to access this call. Please validate your account and try again.'}");
+	echo outputJSON("{error: 'You have insufficient permissions to access this call. Please validate your account and try again. Alternatively, ensure the parameters passed are correct.'}");
 }
 ?>
