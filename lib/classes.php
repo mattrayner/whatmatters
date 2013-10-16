@@ -62,6 +62,40 @@ class Blackboard {
 	}
 	
 	/**
+	 * Check to see if the user and password supplied matched the database
+	 * 
+	 * @param	String	Username
+	 * @param	String	Password
+	 * @return	Boolean	Are they authenticated
+	 **/
+	public function authCheck($username, $password){
+		$dbresult = mysqli_query($this->mysql_connection,"SELECT * FROM `users` WHERE `username` = '".$username."'");
+		
+		//Have we had any users come back?
+		if($dbresult->num_rows > 0){
+			$user = mysql_fetch_array($dbresult);
+			
+			include_once('pbkdf2.php');
+			
+			if(validate_password($password, $user['hash'])){
+				return true;
+			}
+		}
+	
+		return false;
+	}
+	
+	/**
+	 * Update comment's status
+	 *
+	 * @param	int	Comment's ID
+	 * @param	int	New status
+	 **/
+	public function updateStatus($id, $status){
+		//Check the inputs before doing anything.
+	}
+	
+	/**
 	 * Close the database connection
 	 **/
 	public function close(){
