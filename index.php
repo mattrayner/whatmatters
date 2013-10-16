@@ -19,7 +19,7 @@ if(isset($_GET['errorno'])){
     <meta name="author" content="">
     <link rel="shortcut icon" href="assets/ico/favicon.png">
 
-    <title>Signin Template for Bootstrap</title>
+    <title>Blackboard Login</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -55,8 +55,8 @@ if(isset($_GET['errorno'])){
 	  </div>
 	  <?php } ?>
         <h2 class="form-signin-heading">Please sign in</h2>
-        <input type="text" class="form-control" placeholder="Username" autofocus>
-        <input type="password" class="form-control" placeholder="Password">
+        <input type="text" class="form-control" placeholder="Username" name="un" autofocus>
+        <input type="password" class="form-control" placeholder="Password" name="pw">
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       </form>
 

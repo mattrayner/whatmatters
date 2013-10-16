@@ -27,11 +27,4 @@ if( $blackboard->authCheck($un, $pw) ){
 }
 
 header("location: ".$location);
-
-//If this gets called there was a problem connecting to the database
-function shutdown(){
-  header("location: index.php?errorno=1");
-}
-
-register_shutdown_function('shutdown');
 ?>
