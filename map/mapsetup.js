@@ -63,16 +63,16 @@ function initialize() {
   
   if(ourMarker != null){
     //Set the marker image
-	var image = 'purplebox.png';
+	var image = 'http://www.kentunion.co.uk/stylesheet/WhatMatters/purplebox.png';
 	
 	if(ourMarker.isend == true)
-	  image = 'thanks.jpg';	//"we're counting" image
+	  image = 'http://www.kentunion.co.uk/stylesheet/WhatMatters/thanks.jpg';	//"we're counting" image
 		
 	if(ourMarker.isweekend == true)
-	  image = 'weekend.jpg';
+	  image = 'http://www.kentunion.co.uk/stylesheet/WhatMatters/weekend.jpg';
 	  
 	if(ourMarker.isbeginning == true)
-	  image = 'comingsoon.jpg';
+	  image = 'http://www.kentunion.co.uk/stylesheet/WhatMatters/comingsoon.jpg';
 	  
     //Set up the marker
 	var myLatLng = new google.maps.LatLng(ourMarker.pointlat, ourMarker.pointlon);
@@ -102,17 +102,17 @@ function initialize() {
 	if(ourMarker.isbeginning)
 	  contentString = '<div id="content"><div id="siteNotice"></div><div id="bodyContent"><p><b>Just a couple of days until you can tell us what matters!</b></p></div></div>';
 	  
+	var infowindow = new google.maps.InfoWindow({
+	  content: contentString
+	});
+	  
 	//Set the centre point
 	if((ourMarker.isend == true) || (ourMarker.isweekend == true) || (ourMarker.isbeginning == true)){ //So you can see the big markers
 	  map.setCenter(new google.maps.LatLng(51.296060, 1.067594));
 	}else{
 	  map.setCenter(new google.maps.LatLng(ourMarker.pointlat, ourMarker.pointlon));
-	  infowindow.open(map,postBoxMarker);	
+	  //infowindow.open(map,postBoxMarker);	
 	}
-	
-	var infowindow = new google.maps.InfoWindow({
-	  content: contentString
-	});
 	
 	//Add a marker click event - when the marker is clicked open the info window.
 	google.maps.event.addListener(postBoxMarker, 'click', function() {

@@ -126,6 +126,26 @@ class Blackboard {
 	}
 	
 	/**
+	 * Insert a new comment into the database
+	 **/
+	function insertComment($comment){
+		if (!($stmt = $this->mysql_connection->prepare("INSERT INTO comments(comment) VALUES (?)"))) {
+		    return "{\"error\": \"Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error."\"}";
+		}
+		
+		/* Prepared statement, stage 2: bind and execute */
+		if (!$stmt->bind_param("s", $comment)) {
+		    return "{\"error\": \"Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error."\"}";
+		}
+		
+		if (!$stmt->execute()) {
+		    return "{\"error\": \"Execute failed: (" . $stmt->errno . ") " . $stmt->error."\"}";
+		}
+		
+		return "{\"success\": \"Appears to have been successful\"}";
+	}
+	
+	/**
 	 * Close the database connection
 	 **/
 	public function close(){

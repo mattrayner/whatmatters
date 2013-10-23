@@ -1,7 +1,5 @@
 <?php
 session_start();
-error_reporting(0); //Supress errors caused when access a non-object even though its an object.
-
 /**
  * API to grab each comment in JSON format :)
  **/
@@ -35,14 +33,14 @@ if($allowedToExecute){
 			
 			$comment = unserialize($comment);
 		
-			$jsonString .= $key." : { id : ".$comment->id.", timestamp : ".$comment->timestamp.", comment : ".$comment->comment.", status : ".$comment->status." }";
+			$jsonString .= $key." : { \"id\" : ".$comment->id.", \"timestamp\" : \"".$comment->timestamp."\", \"comment\" : \"".$comment->comment."\", status : ".$comment->status." }";
 			
 			//Append a comma if this is not the last comment
-			if($key < $totalComments){$jsonString .=", ";}
+			if($key < ($totalComments-1)){$jsonString .=", ";}
 		}
 		
 		//Finish our JSON string
-		$jsonString .= "}";
+		$jsonString .= "}}";
 		
 		echo outputJSON($jsonString);
 	}else{

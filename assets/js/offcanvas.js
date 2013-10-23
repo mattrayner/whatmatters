@@ -36,5 +36,5 @@ $(document).ready(function() {
 	  });
   }
   
-  setInterval(hashCheck, 500);
+  setInterval(hashCheck, 1);
 });
